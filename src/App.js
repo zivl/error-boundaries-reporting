@@ -2,19 +2,21 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import CodeBlock from './CodeBlock';
 import { foo, callToExternalCode, failingCode } from './code-samples/codeSamples';
-import { myCodeZone, otherCodeZone } from './errors/errorBoundaries';
+import errorBoundariesCreator from './errors/errorBoundaries';
 import './App.css';
 
-const codes = [
-  { label: 'Foo', func: foo, toString: foo.toString() },
-  { label: 'Failing Code (my own)', func: myCodeZone(failingCode), toString: failingCode.toString()},
-  { label: 'Failing Code (others)', func: otherCodeZone(failingCode), toString: failingCode.toString() }
-];
-
 class App extends Component {
-  state = {
-    codeToExecute: codes[0]
-  };
+
+  constructor(props) {
+    super(props)
+    const { myCodeZone, otherCodeZone } = errorBoundariesCreator(props.raven)
+    this.codes = [
+      { label: 'Foo', func: foo, toString: foo.toString() },
+      { label: 'Failing Code (my own)', func: myCodeZone(failingCode), toString: failingCode.toString()},
+      { label: 'Failing Code (others)', func: otherCodeZone(failingCode), toString: failingCode.toString() }
+    ];
+    this.state = { codeToExecute: this.codes[0] };
+  }
 
   render() {
     const { label, func, toString } = this.state.codeToExecute;
@@ -29,7 +31,7 @@ class App extends Component {
           <div>
             <CodeBlock title={'Executor'} realFunction={callToExternalCode.bind(null, func)} codeString={callToExternalCode.toString()} />
             <select onChange={evt => this.onCodeSelect(evt)}>
-              {codes.map(code => <option key={code.label} value={code.label}>{code.label}</option>)}
+              {this.codes.map(code => <option key={code.label} value={code.label}>{code.label}</option>)}
             </select>
           </div>
         </div>
@@ -38,7 +40,7 @@ class App extends Component {
   }
 
   onCodeSelect(evt) {
-    this.setState({codeToExecute: codes.find(code => code.label === evt.target.value)})
+    this.setState({codeToExecute: this.codes.find(code => code.label === evt.target.value)})
   }
 }
 
