@@ -11,12 +11,8 @@ function callToExternalCode(code) {
     // do something there...
 }
 
-function normalCode() {
-    return 'nice name';
-}
-
 function failingCode() {
     throw new Error('Oops');
 }
 
-export { foo, callToExternalCode, normalCode, failingCode }
+export { foo, callToExternalCode, failingCode }
