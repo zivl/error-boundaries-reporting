@@ -5,6 +5,7 @@ script:
   - "yarn build"
 deploy:
   provider: pages
+  local-dir: build
   skip-cleanup: true
   github-token: $GITHUB_TOKEN
   on:
