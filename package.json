@@ -1,11 +1,13 @@
 {
   "name": "error-boundaries-reporting",
   "version": "0.1.0",
+  "homepage": "http://zivl.github.io/error-boundaries-reporting",
   "dependencies": {
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-scripts": "1.1.4",
-    "react-syntax-highlighter": "^7.0.2"
+    "react-syntax-highlighter": "^7.0.2",
+    "wix-error-boundaries": "^0.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
