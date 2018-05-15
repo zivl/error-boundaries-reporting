@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import CodeBlock from './CodeBlock';
-import { foo, callToExternalCode, failingCode } from './codeSamples';
+import { foo, callToExternalCode, failingCode } from './code-samples/codeSamples';
+import { myCodeZone, otherCodeZone } from './errors/errorBoundaries';
 import './App.css';
 
-const codes = [{ label: 'Foo', func: foo }, { label: 'Failing Code', func: failingCode }];
+const codes = [
+  { label: 'Foo', func: foo, toString: foo.toString() },
+  { label: 'Failing Code (my own)', func: myCodeZone(failingCode), toString: failingCode.toString()},
+  { label: 'Failing Code (others)', func: otherCodeZone(failingCode), toString: failingCode.toString() }
+];
 
 class App extends Component {
   state = {
@@ -12,6 +17,7 @@ class App extends Component {
   };
 
   render() {
+    const { label, func, toString } = this.state.codeToExecute;
     return (
       <div className="App">
         <header className="App-header">
@@ -19,9 +25,9 @@ class App extends Component {
           <h1 className="App-title">Error Boundaries & Error Reporting Example App</h1>
         </header>
         <div className="App-intro">
-          {codes.map(code => <CodeBlock key={code.label} title={code.label} realFunction={code.func} codeString={code.func.toString()} />)}
+          <CodeBlock title={label} realFunction={func} codeString={toString} />
           <div>
-            <CodeBlock title={'Executor'} realFunction={callToExternalCode.bind(null, this.state.codeToExecute.func)} codeString={callToExternalCode.toString()} />
+            <CodeBlock title={'Executor'} realFunction={callToExternalCode.bind(null, func)} codeString={callToExternalCode.toString()} />
             <select onChange={evt => this.onCodeSelect(evt)}>
               {codes.map(code => <option key={code.label} value={code.label}>{code.label}</option>)}
             </select>
